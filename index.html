@@ -3,47 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Punnett Square Predictor</title>
+    <title>BioGen - Grade 8 Genetics</title>
     <style>
-        :root {
-            --lab-green: #2ecc40;
-            --lab-green-dark: #27ae60;
-            --lab-white: #f8fff6;
-            --lab-gray: #e5ede7;
-            --lab-text: #222;
+        :root { --lab-green: #2ecc71; --lab-green-dark: #27ae60; --lab-white: #f8fff6; --lab-text: #222; }
+        body { background: var(--lab-white); color: var(--lab-text); font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; text-align: center; }
+        .container { max-width: 420px; margin: 20px auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(46, 204, 113, 0.2); border: 2px solid var(--lab-green); }
+        h1 { color: var(--lab-green-dark); margin-bottom: 5px; }
+        .input-group { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
+        input { width: 45px; height: 45px; text-align: center; font-size: 1.5rem; border: 2px solid #ddd; border-radius: 8px; text-transform: uppercase; }
+        button { background: var(--lab-green); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; }
+        table { margin: 25px auto; border-collapse: separate; border-spacing: 5px; }
+        td { width: 60px; height: 60px; border: 2px solid var(--lab-green); border-radius: 10px; font-weight: bold; font-size: 1.3rem; background: #eafaf1; }
+        .header-td { background: var(--lab-green); color: white; border: none; }
+        .results { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BioGen</h1>
+        <p>Punnett Square Predictor</p>
+        
+        <div class="input-group">
+            <div><label>Parent 1</label><br><input id="p1a" maxlength="1"> <input id="p1b" maxlength="1"></div>
+            <div><label>Parent 2</label><br><input id="p2a" maxlength="1"> <input id="p2b" maxlength="1"></div>
+        </div>
+        
+        <button onclick="solve()">Generate Results</button>
+        
+        <table id="punnettTable"></table>
+        <div id="stats" class="results"></div>
+    </div>
+
+    <script>
+        function solve() {
+            const p1 = [document.getElementById('p1a').value, document.getElementById('p1b').value];
+            const p2 = [document.getElementById('p2a').value, document.getElementById('p2b').value];
+            
+            if(p1.includes("") || p2.includes("")) { alert("Fill in all alleles!"); return; }
+
+            let tableHTML = `<tr><td class="header-td"></td><td class="header-td">${p1[0]}</td><td class="header-td">${p1[1]}</td></tr>`;
+            let results = [];
+
+            for(let i=0; i<2; i++) {
+                tableHTML += `<tr><td class="header-td">${p2[i]}</td>`;
+                for(let j=0; j<2; j++) {
+                    let combo = [p2[i], p1[j]].sort().join("");
+                    results.push(combo);
+                    tableHTML += `<td>${combo}</td>`;
+                }
+                tableHTML += `</tr>`;
+            }
+
+            document.getElementById('punnettTable').innerHTML = tableHTML;
+
+            let counts = {};
+            results.forEach(x => counts[x] = (counts[x] || 0) + 1);
+            let summary = "<b>Genotypes:</b><br>";
+            for(let key in counts) { summary += `${key}: ${counts[key]*25}%   `; }
+            document.getElementById('stats').innerHTML = summary;
         }
-        body {
-            background: var(--lab-white);
-            color: var(--lab-text);
-            font-family: 'Segoe UI', Arial, sans-serif;
-            padding: 0;
-            margin: 0;
-        }
-        .container {
-            max-width: 420px;
-            margin: 14px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(46,204,64,0.07), 0 1px 1px rgba(44,62,80,0.03);
-            padding: 20px 14px 24px 14px;
-        }
-        h1 {
-            color: var(--lab-green-dark);
-            text-align: center;
-            margin-bottom: 8px;
-        }
-        label {
-            display: block;
-            font-weight: 500;
-            margin-top: 18px;
-            margin-bottom: 8px;
-            color: var(--lab-green-dark);
-            letter-spacing: 0.5px;
-        }
-        .parent-inputs {
-            display: flex;
-            gap: 10px;
-        }
-        input[type="text"] {
-           
-
+    </script>
+</body>
+</html>
