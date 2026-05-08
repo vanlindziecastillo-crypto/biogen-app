@@ -1,0 +1,15 @@
+{
+  "name": "BioGen Genetics Predictor",
+  "short_name": "BioGen",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8fff6",
+  "theme_color": "#2ecc71",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3022/3022513.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
